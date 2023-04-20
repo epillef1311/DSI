@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:flutter_application_2/editWord.dart';
 import 'package:flutter_application_2/repositorio.dart';
 import 'package:flutter_application_2/buildRow.dart';
 
@@ -19,7 +20,7 @@ class RandomWords extends StatefulWidget {
 class RandomWordsState extends State<RandomWords> {
   Widget _buildList() {
     return ListView.builder(
-        itemCount: 40,
+        itemCount: widget.repositorio.itemInList,
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, item) {
           if (item.isOdd) return Divider();
@@ -35,6 +36,18 @@ class RandomWordsState extends State<RandomWords> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        EditWord(repositorio: widget.repositorio)));
+          },
+          backgroundColor: Colors.red,
+          child: const Icon(Icons.add),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         appBar: AppBar(
           title: Text('Word Pair Genenrator'),
           actions: <Widget>[

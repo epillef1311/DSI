@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/repositorio.dart';
 
 class EditWord extends StatefulWidget {
-  WordPair pair;
+  WordPair? pair;
   Repositorio repositorio;
-  EditWord({required this.pair, required this.repositorio, Key? key})
-      : super(key: key);
+  EditWord({this.pair, required this.repositorio, Key? key}) : super(key: key);
 
   @override
   State<EditWord> createState() => _EditWordState();
@@ -18,9 +17,14 @@ class _EditWordState extends State<EditWord> {
 
   @override
   void initState() {
-    super.initState();
-    _firstController = TextEditingController(text: widget.pair.first);
-    _secondController = TextEditingController(text: widget.pair.second);
+    if (widget.pair != null) {
+      super.initState();
+      _firstController = TextEditingController(text: widget.pair?.first);
+      _secondController = TextEditingController(text: widget.pair?.second);
+    } else {
+      _firstController = TextEditingController();
+      _secondController = TextEditingController();
+    }
   }
 
   @override
@@ -47,10 +51,15 @@ class _EditWordState extends State<EditWord> {
         onPressed: () {
           final newPair =
               WordPair(_firstController.text, _secondController.text);
-          final index =
-              widget.repositorio.randomWordsPairs.indexOf(widget.pair);
-          widget.repositorio.randomWordsPairs[index] = newPair;
-          widget.pair = WordPair(_firstController.text, _secondController.text);
+          if (widget.pair != null) {
+            final index =
+                widget.repositorio.randomWordsPairs.indexOf(widget.pair!);
+            widget.repositorio.randomWordsPairs[index] = newPair;
+          } else {
+            widget.repositorio.AddWorPair(newPair);
+            widget.repositorio.AddItemInList();
+          }
+
           Navigator.pushNamed(context, '/');
         },
         child: Icon(Icons.save),
